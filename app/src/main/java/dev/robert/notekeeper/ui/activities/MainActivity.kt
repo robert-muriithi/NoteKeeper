@@ -10,6 +10,10 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import dev.robert.notekeeper.R
 import dev.robert.notekeeper.databinding.ActivityMainBinding
 
@@ -28,30 +32,36 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+        val drawerLayout: DrawerLayout = binding.drawerLayout
+        val navView: NavigationView = binding.navigationView
+        navView.setupWithNavController(navController)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.notesFragment, R.id.addNotesFragment
+            ), drawerLayout
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab)
-                .setAction("Action", null).show()
-        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        supportActionBar?.show()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
+         when (item.itemId) {
+            R.id.action_settings -> Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show()
+            R.id.action_sync -> Toast.makeText(this, "jvkjdvjk", Toast.LENGTH_SHORT).show()
             else -> super.onOptionsItemSelected(item)
         }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -59,4 +69,5 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
     }
+
 }
