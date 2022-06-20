@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/drawable/ic_add_note.xml" value="0.144" />
+        <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/drawable/ic_done.xml" value="0.144" />
+        <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/drawable/ic_edit.xml" value="0.144" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/drawable/ic_google.xml" value="0.1305" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/drawable/ic_photo_library.xml" value="0.1305" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/drawable/ic_reminder.xml" value="0.1305" />
@@ -12,6 +15,7 @@
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/drawable/ic_screen_two.xml" value="0.144" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/activity_add_notes.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/activity_maps.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/activity_sign_in.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/activity_splash.xml" value="0.1859375" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/activity_view_pager.xml" value="0.1859375" />
@@ -21,6 +25,9 @@
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/fragment_first.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/fragment_notes.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/fragment_on_boarding_screen_one.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/fragment_view_note.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/nav_header_items.xml" value="0.2" />
+        <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/note_list_item.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/layout/select_photo_dialog.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/menu/drawer_items.xml" value="0.2" />
         <entry key="..\:/AndroidStudioProjects/NoteKeeper2/app/src/main/res/menu/menu_main.xml" value="0.2" />

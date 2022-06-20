@@ -1,5 +1,6 @@
 package dev.robert.notekeeper.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -11,11 +12,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import dev.robert.notekeeper.R
 import dev.robert.notekeeper.databinding.ActivityMainBinding
+import dev.robert.notekeeper.ui.fragments.add_notes.AddNotesActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,11 +40,21 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.notesFragment, R.id.addNotesFragment
+                R.id.notesFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-
+        binding.fab.setOnClickListener {
+            startActivity(Intent(this, AddNotesActivity::class.java))
+        }
+        /*binding.navigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_notes -> {
+                    Toast.makeText(this, "Notes", Toast.LENGTH_SHORT).show()
+                    true
+                }
+            }
+        }*/
 
     }
 
@@ -56,9 +69,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-         when (item.itemId) {
+        when (item.itemId) {
             R.id.action_settings -> Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show()
-            R.id.action_sync -> Toast.makeText(this, "jvkjdvjk", Toast.LENGTH_SHORT).show()
+            R.id.action_sync -> Toast.makeText(this, "syc", Toast.LENGTH_SHORT).show()
             else -> super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)
@@ -68,6 +81,14 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun onBackPressed() {
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
 }

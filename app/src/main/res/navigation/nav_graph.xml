@@ -8,18 +8,5 @@
         android:id="@+id/notesFragment"
         android:name="dev.robert.notekeeper.ui.fragments.home.NotesFragment"
         android:label="Notes"
-        tools:layout="@layout/fragment_notes" >
-        <action
-            android:id="@+id/action_notesFragment_to_addNotesFragment"
-            app:destination="@id/addNotesFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/addNotesFragment"
-        android:name="dev.robert.notekeeper.ui.fragments.add_notes.AddNotesFragment"
-        android:label="Add Notes"
-        tools:layout="@layout/fragment_add_notes" >
-        <action
-            android:id="@+id/action_addNotesFragment_to_notesFragment"
-            app:destination="@id/notesFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_notes" />
 </navigation>
