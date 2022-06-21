@@ -8,17 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import dagger.hilt.android.AndroidEntryPoint
 import dev.robert.notekeeper.R
 import dev.robert.notekeeper.adapter.NotesListAdapter
 import dev.robert.notekeeper.databinding.FragmentNotesBinding
 import dev.robert.notekeeper.model.Note
+import dev.robert.notekeeper.utils.Resource
 
+@AndroidEntryPoint
 class NotesFragment : Fragment() {
 
     private var _binding: FragmentNotesBinding? = null
@@ -26,6 +31,7 @@ class NotesFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private val adapter by lazy { NotesListAdapter() }
     private val list: ArrayList<Note> = ArrayList()
+    private val viewModel : NotesViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,8 +42,18 @@ class NotesFragment : Fragment() {
         val view = binding.root
 
         setUpAdapter()
-        fetchNotes()
-        cacheNotes()
+        //fetchNotes()
+        //cacheNotes()
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.getNotes()
+        }
+        viewModel.note.observe(viewLifecycleOwner){
+            when (it){
+                is Resource.Loading -> {
+
+                }
+            }
+        }
 
         return view
 

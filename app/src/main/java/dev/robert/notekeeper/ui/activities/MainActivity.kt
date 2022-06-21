@@ -19,10 +19,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import dev.robert.notekeeper.R
 import dev.robert.notekeeper.databinding.ActivityMainBinding
 import dev.robert.notekeeper.ui.fragments.add_notes.AddNotesActivity
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

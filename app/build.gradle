@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -60,8 +61,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.0.5'
 
     //coroutine support for firebase
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
 
     //google sign in
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
@@ -82,4 +83,12 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.13.0'
+
+    //Dagger hilt
+    implementation 'com.google.dagger:hilt-android:2.41'
+    kapt 'com.google.dagger:hilt-android-compiler:2.40.5'
+}
+
+kapt {
+    correctErrorTypes = true
 }

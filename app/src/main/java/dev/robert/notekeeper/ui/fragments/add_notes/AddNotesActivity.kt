@@ -22,6 +22,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import dagger.hilt.android.AndroidEntryPoint
 import dev.robert.notekeeper.R
 import dev.robert.notekeeper.databinding.ActivityAddNotesBinding
 import dev.robert.notekeeper.model.Note
@@ -29,7 +30,7 @@ import dev.robert.notekeeper.ui.activities.MainActivity
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-
+@AndroidEntryPoint
 class AddNotesActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddNotesBinding
     private val REQUEST_IMAGE_CAPTURE = 1

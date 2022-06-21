@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import dagger.hilt.android.AndroidEntryPoint
 import dev.robert.notekeeper.adapter.ViewPagerAdapter
 import dev.robert.notekeeper.databinding.ActivityViewPagerBinding
 import dev.robert.notekeeper.onboarding.OnBoardingScreenOne
 import dev.robert.notekeeper.onboarding.OnBoardingScreenThree
 import dev.robert.notekeeper.onboarding.OnBoardingScreenTwo
 
+@AndroidEntryPoint
 class ViewPagerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityViewPagerBinding
     override fun onCreate(savedInstanceState: Bundle?) {

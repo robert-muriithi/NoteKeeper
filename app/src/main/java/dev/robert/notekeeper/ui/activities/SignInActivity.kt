@@ -12,10 +12,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 import dev.robert.notekeeper.R
 import dev.robert.notekeeper.databinding.ActivitySignInBinding
 import dev.robert.notekeeper.ui.fragments.home.NotesFragment
-
+@AndroidEntryPoint
 class SignInActivity : AppCompatActivity() {
     private lateinit var binding : ActivitySignInBinding
     private lateinit var auth : FirebaseAuth
