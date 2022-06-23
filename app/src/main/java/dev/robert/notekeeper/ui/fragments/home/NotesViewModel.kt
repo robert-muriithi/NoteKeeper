@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.robert.notekeeper.data.repository.NoteRepository
 import dev.robert.notekeeper.data.repository.NoteRepositoryImpl
 import dev.robert.notekeeper.model.Note
 import dev.robert.notekeeper.utils.Resource
@@ -11,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel  @Inject constructor(
-    private val repository : NoteRepositoryImpl
+    private val repository : NoteRepository
 ): ViewModel() {
 
     private val _notes = MutableLiveData<Resource<List<Note>>>()
@@ -20,7 +21,22 @@ class NotesViewModel  @Inject constructor(
 
      suspend fun getNotes()  {
          _notes.value = Resource.Loading
-         _notes.value = repository.getNotes()
+         repository.getNotes { note->
+             _notes.value = note
+         }
     }
+
+    private val _addNote = MutableLiveData<Resource<String>>()
+    val addNote : LiveData<Resource<String>>
+        get() = _addNote
+
+    suspend fun addNote(note : Note){
+        _addNote.value = Resource.Loading
+        repository.addNote(note){ note ->
+            _addNote.value = note
+        }
+
+    }
+
 
 }

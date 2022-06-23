@@ -16,7 +16,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +31,9 @@ import dev.robert.notekeeper.R
 import dev.robert.notekeeper.databinding.ActivityAddNotesBinding
 import dev.robert.notekeeper.model.Note
 import dev.robert.notekeeper.ui.activities.MainActivity
+import dev.robert.notekeeper.ui.fragments.home.NotesViewModel
+import dev.robert.notekeeper.utils.Resource
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,6 +45,8 @@ class AddNotesActivity : AppCompatActivity() {
     private lateinit var firestore: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private var selectedImage: Uri? = null
+    private val viewModel : NotesViewModel by viewModels()
+
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +62,7 @@ class AddNotesActivity : AppCompatActivity() {
         binding.addNotesToolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+
 
         binding.pickPhoto.setOnClickListener {
             val dialog = Dialog(this)
@@ -85,6 +95,19 @@ class AddNotesActivity : AppCompatActivity() {
 
         binding.setReminder.setOnClickListener {
             pickDateTime()
+        }
+
+        if (validateEntries()){
+            val userId = auth.currentUser?.uid
+            val title = binding.noteTitle.text.toString().trim()
+            val content = binding.noteContent.text.toString().trim()
+            lifecycleScope.launch {
+                viewModel.addNote(
+                    Note(userId, title, content)
+                )
+
+            }
+
         }
 
     }
@@ -127,7 +150,8 @@ class AddNotesActivity : AppCompatActivity() {
     }
 
 
-    private fun validateEntries() {
+    private fun validateEntries()  : Boolean {
+        val  isValid = true
         val userId = auth.currentUser?.uid
         val title = binding.noteTitle.text.toString().trim()
         val content = binding.noteContent.text.toString().trim()
@@ -138,9 +162,9 @@ class AddNotesActivity : AppCompatActivity() {
             binding.noteContent.error = "Note is required"
         }else{
             binding.progressBar.isVisible = true
-            val date = binding.currentDate.text.toString()
-            saveNote(userId, title, content, date)
+        //saveNote(userId, title, content, date)
         }
+        return isValid
     }
 
     @SuppressLint("SimpleDateFormat")

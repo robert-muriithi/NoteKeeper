@@ -2,26 +2,26 @@ package dev.robert.notekeeper.ui.fragments.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import dagger.hilt.android.AndroidEntryPoint
-import dev.robert.notekeeper.R
 import dev.robert.notekeeper.adapter.NotesListAdapter
 import dev.robert.notekeeper.databinding.FragmentNotesBinding
 import dev.robert.notekeeper.model.Note
 import dev.robert.notekeeper.utils.Resource
+
 
 @AndroidEntryPoint
 class NotesFragment : Fragment() {
@@ -47,10 +47,19 @@ class NotesFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getNotes()
         }
-        viewModel.note.observe(viewLifecycleOwner){
-            when (it){
+        viewModel.note.observe(viewLifecycleOwner){ state ->
+            when (state){
                 is Resource.Loading -> {
+                    binding.progressCircular.isVisible = true
 
+                }
+                is Resource.Success -> {
+                    binding.progressCircular.isVisible = false
+                    adapter.submitList(list)
+                }
+                is Resource.Error -> {
+                    binding.progressCircular.isVisible = false
+                    Toast.makeText(requireContext(), "An error occurred", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -95,25 +104,17 @@ class NotesFragment : Fragment() {
     }
 
     private fun setUpAdapter() {
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                binding.recyclerView.context,
+                DividerItemDecoration.HORIZONTAL
+            )
+        )
         binding.recyclerView.adapter = adapter
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun fetchNotes() {
-        db = FirebaseFirestore.getInstance()
-        db.collection("notes").get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    println(document.id + " => " + document.data)
-                    val note = document.toObject(Note::class.java)
-                    list.add(note)
-                    adapter.submitList(list)
-                }
-            }
-            .addOnFailureListener { exception ->
-                println("Error getting documents: " + exception.message)
-            }
-    }
+
 
     private val itemTouchHelper = ItemTouchHelper(object :
         ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
