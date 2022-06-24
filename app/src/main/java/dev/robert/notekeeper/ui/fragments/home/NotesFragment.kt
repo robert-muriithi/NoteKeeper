@@ -30,7 +30,7 @@ class NotesFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var db: FirebaseFirestore
     private val adapter by lazy { NotesListAdapter() }
-    private val list: ArrayList<Note> = ArrayList()
+    private val list: MutableList<Note> = ArrayList()
     private val viewModel : NotesViewModel by viewModels()
 
     override fun onCreateView(

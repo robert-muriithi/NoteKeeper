@@ -26,8 +26,8 @@ class NotesViewModel  @Inject constructor(
          }
     }
 
-    private val _addNote = MutableLiveData<Resource<String>>()
-    val addNote : LiveData<Resource<String>>
+    private val _addNote = MutableLiveData<Resource<List<Note>>>()
+    val addNote : LiveData<Resource<List<Note>>>
         get() = _addNote
 
     suspend fun addNote(note : Note){

@@ -37,13 +37,15 @@ import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+
 @AndroidEntryPoint
-class AddNotesActivity : AppCompatActivity() {
+class AddNotesActivity  : AppCompatActivity() {
     private lateinit var binding: ActivityAddNotesBinding
     private val REQUEST_IMAGE_CAPTURE = 1
     private val RESULT_LOAD_IMAGE = 2
-    private lateinit var firestore: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
     private var selectedImage: Uri? = null
     private val viewModel : NotesViewModel by viewModels()
 
@@ -54,9 +56,8 @@ class AddNotesActivity : AppCompatActivity() {
         binding = ActivityAddNotesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.addNotesToolbar)
-
+        db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-        firestore = FirebaseFirestore.getInstance()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.addNotesToolbar.setNavigationOnClickListener {
@@ -93,22 +94,6 @@ class AddNotesActivity : AppCompatActivity() {
         binding.currentDate.text = currentDate
         binding.currentTime.text = currentTime
 
-        binding.setReminder.setOnClickListener {
-            pickDateTime()
-        }
-
-        if (validateEntries()){
-            val userId = auth.currentUser?.uid
-            val title = binding.noteTitle.text.toString().trim()
-            val content = binding.noteContent.text.toString().trim()
-            lifecycleScope.launch {
-                viewModel.addNote(
-                    Note(userId, title, content)
-                )
-
-            }
-
-        }
 
     }
 
@@ -126,7 +111,31 @@ class AddNotesActivity : AppCompatActivity() {
             }
             R.id.action_save -> {
                 Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
-                validateEntries()
+                if (validateEntries()){
+                    val userId = auth.currentUser?.uid
+                    val title = binding.noteTitle.text.toString().trim()
+                    val content = binding.noteContent.text.toString().trim()
+                    viewModel.addNote.observe(this@AddNotesActivity) {
+                        when (it) {
+                            is Resource.Loading -> {
+                                binding.progressBar.isVisible = true
+                            }
+                            is Resource.Success -> {
+                                binding.progressBar.isVisible = false
+                                lifecycleScope.launch {
+                                    viewModel.addNote(
+                                        Note(userId, title, content)
+                                    )
+                                }
+                            }
+                            is Resource.Error -> {
+                                binding.progressBar.isVisible = false
+                                Toast.makeText(this@AddNotesActivity, it.string, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -162,7 +171,6 @@ class AddNotesActivity : AppCompatActivity() {
             binding.noteContent.error = "Note is required"
         }else{
             binding.progressBar.isVisible = true
-        //saveNote(userId, title, content, date)
         }
         return isValid
     }
@@ -226,7 +234,7 @@ class AddNotesActivity : AppCompatActivity() {
 
     private fun saveNote(userId: String?, title: String, content: String, date: String) {
         val note = Note(userId, title, content, date)
-        val collection = firestore.collection("notes")
+        val collection = db.collection("notes")
 
         collection.add(note).addOnSuccessListener {
             Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show()

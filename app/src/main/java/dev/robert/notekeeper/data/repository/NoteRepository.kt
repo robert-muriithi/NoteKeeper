@@ -5,5 +5,5 @@ import dev.robert.notekeeper.utils.Resource
 
 interface NoteRepository {
     suspend fun getNotes(result: (Resource<List<Note>>) -> Unit)
-    suspend fun addNote(note: Note, result: (Resource<String>) -> Unit)
+    suspend fun addNote(note: Note, result: (Resource<List<Note>>) -> Unit)
 }
