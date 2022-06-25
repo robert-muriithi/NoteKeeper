@@ -17,11 +17,8 @@ import android.view.View
 import android.view.Window
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,10 +31,8 @@ import dev.robert.notekeeper.ui.activities.MainActivity
 import dev.robert.notekeeper.ui.fragments.home.NotesViewModel
 import dev.robert.notekeeper.utils.Resource
 import kotlinx.coroutines.launch
-import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddNotesActivity  : AppCompatActivity() {
@@ -110,32 +105,38 @@ class AddNotesActivity  : AppCompatActivity() {
                 clearEntries()
             }
             R.id.action_save -> {
-                Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show()
-                if (validateEntries()){
                     val userId = auth.currentUser?.uid
                     val title = binding.noteTitle.text.toString().trim()
                     val content = binding.noteContent.text.toString().trim()
-                    viewModel.addNote.observe(this@AddNotesActivity) {
-                        when (it) {
-                            is Resource.Loading -> {
-                                binding.progressBar.isVisible = true
-                            }
-                            is Resource.Success -> {
-                                binding.progressBar.isVisible = false
-                                lifecycleScope.launch {
-                                    viewModel.addNote(
-                                        Note(userId, title, content)
-                                    )
+                    val date = binding.currentDate.text.toString()
+                    if (title.isEmpty() || content.isEmpty()) {
+                        Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val note = Note(userId, title, content, date )
+                        this.lifecycleScope.launch {
+                            viewModel.addNote(note)
+                        }
+                        viewModel.addNote.observe(this){
+                            when(it){
+                                is Resource.Loading -> {
+                                    binding.progressBar.isVisible = true
+                                }
+                                is Resource.Success -> {
+                                    binding.progressBar.isVisible = false
+                                    Toast.makeText(this, "Notes Added successfully", Toast.LENGTH_SHORT).show()
+                                    finish()
+
+                                }
+                                is Resource.Error -> {
+                                    binding.progressBar.isVisible = false
+                                    Toast.makeText(this, "An error occured", Toast.LENGTH_SHORT).show()
+
                                 }
                             }
-                            is Resource.Error -> {
-                                binding.progressBar.isVisible = false
-                                Toast.makeText(this@AddNotesActivity, it.string, Toast.LENGTH_SHORT)
-                                    .show()
-                            }
                         }
+
                     }
-                }
+
             }
         }
         return super.onOptionsItemSelected(item)
@@ -158,22 +159,6 @@ class AddNotesActivity  : AppCompatActivity() {
         dialog.show()
     }
 
-
-    private fun validateEntries()  : Boolean {
-        val  isValid = true
-        val userId = auth.currentUser?.uid
-        val title = binding.noteTitle.text.toString().trim()
-        val content = binding.noteContent.text.toString().trim()
-        if (title.isEmpty()) {
-            binding.noteTitle.error = "Title is required"
-        }
-        if (content.isEmpty()) {
-            binding.noteContent.error = "Note is required"
-        }else{
-            binding.progressBar.isVisible = true
-        }
-        return isValid
-    }
 
     @SuppressLint("SimpleDateFormat")
     private fun pickDateTime() {

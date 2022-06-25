@@ -12,8 +12,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -23,12 +25,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.robert.notekeeper.R
 import dev.robert.notekeeper.databinding.ActivityMainBinding
 import dev.robert.notekeeper.ui.fragments.add_notes.AddNotesActivity
+import dev.robert.notekeeper.ui.fragments.home.NotesViewModel
+import dev.robert.notekeeper.utils.Resource
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var auth: FirebaseAuth
+    private val viewModel : NotesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -119,7 +125,18 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show()
-            R.id.action_sync -> Toast.makeText(this, "syc", Toast.LENGTH_SHORT).show()
+            R.id.action_sync -> {
+                this.lifecycleScope.launchWhenCreated {
+                    viewModel.getNotes()
+                }
+                viewModel.addNote.observe(this){
+                    when(it){
+                        is Resource.Loading -> {
+                           // binding..isV = VISIBLE
+                        }
+                    }
+                }
+            }
             else -> super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)

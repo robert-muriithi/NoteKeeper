@@ -30,7 +30,7 @@ class NotesFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var db: FirebaseFirestore
     private val adapter by lazy { NotesListAdapter() }
-    private val list: MutableList<Note> = ArrayList()
+    private val list: ArrayList<Note> = ArrayList()
     private val viewModel : NotesViewModel by viewModels()
 
     override fun onCreateView(
@@ -41,9 +41,16 @@ class NotesFragment : Fragment() {
         _binding = FragmentNotesBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        setUpAdapter()
-        //fetchNotes()
-        //cacheNotes()
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context,
+                RecyclerView.VERTICAL
+            )
+        )
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
+        binding.recyclerView.setHasFixedSize(true)
+
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getNotes()
         }
@@ -51,11 +58,10 @@ class NotesFragment : Fragment() {
             when (state){
                 is Resource.Loading -> {
                     binding.progressCircular.isVisible = true
-
                 }
                 is Resource.Success -> {
                     binding.progressCircular.isVisible = false
-                    adapter.submitList(list)
+                    adapter.submitList(state.data)
                 }
                 is Resource.Error -> {
                     binding.progressCircular.isVisible = false
@@ -65,7 +71,6 @@ class NotesFragment : Fragment() {
         }
 
         return view
-
     }
 
     override fun onDestroyView() {
@@ -102,19 +107,6 @@ class NotesFragment : Fragment() {
             }
         }
     }
-
-    private fun setUpAdapter() {
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                binding.recyclerView.context,
-                DividerItemDecoration.HORIZONTAL
-            )
-        )
-        binding.recyclerView.adapter = adapter
-        itemTouchHelper.attachToRecyclerView(binding.recyclerView)
-    }
-
-
 
     private val itemTouchHelper = ItemTouchHelper(object :
         ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {

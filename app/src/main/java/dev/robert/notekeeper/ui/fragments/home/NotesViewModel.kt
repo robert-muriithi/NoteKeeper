@@ -16,8 +16,7 @@ class NotesViewModel  @Inject constructor(
 ): ViewModel() {
 
     private val _notes = MutableLiveData<Resource<List<Note>>>()
-    val note : LiveData<Resource<List<Note>>>
-        get() = _notes
+    val note : LiveData<Resource<List<Note>>> = _notes
 
      suspend fun getNotes()  {
          _notes.value = Resource.Loading
@@ -27,8 +26,7 @@ class NotesViewModel  @Inject constructor(
     }
 
     private val _addNote = MutableLiveData<Resource<List<Note>>>()
-    val addNote : LiveData<Resource<List<Note>>>
-        get() = _addNote
+    val addNote : LiveData<Resource<List<Note>>> = _addNote
 
     suspend fun addNote(note : Note){
         _addNote.value = Resource.Loading

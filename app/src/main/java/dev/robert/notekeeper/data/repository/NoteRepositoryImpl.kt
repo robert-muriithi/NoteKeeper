@@ -16,7 +16,7 @@ class NoteRepositoryImpl @Inject constructor(
 ) : NoteRepository {
     private val TAG = "NoteRepositoryImpl"
     override suspend fun getNotes(result: (Resource<List<Note>>) -> Unit) {
-        database.collection("notes")
+        database.collection(FirestoreTable.TABLE_NOTES)
             .get()
             .addOnSuccessListener { snapshot->
                 val notes = arrayListOf<Note>()
@@ -37,10 +37,9 @@ class NoteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addNote(note: Note, result: (Resource<List<Note>>) -> Unit) {
-        database.collection("note")
+        database.collection(FirestoreTable.TABLE_NOTES)
             .add(note)
             .addOnSuccessListener {
-                Log.d(TAG, "Note added: $note")
                 result.invoke(
                     Resource.Success(arrayListOf(note))
                 )
@@ -57,18 +56,4 @@ class NoteRepositoryImpl @Inject constructor(
             }
     }
 
-    /*override suspend fun addNote(note: Note, result: (Resource<String>) -> Unit) {
-        database.collection(FirestoreTable.TABLE)
-            .add(note)
-            .addOnSuccessListener {
-                result.invoke(
-                    Resource.Success(it.id)
-                )
-            }
-            .addOnFailureListener {
-                result.invoke(
-                    Resource.Error(it.localizedMessage)
-                )
-            }
-    }*/
 }

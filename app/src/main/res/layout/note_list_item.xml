@@ -10,6 +10,7 @@
     android:checkable="true"
     android:layout_height="wrap_content"
     style="?attr/materialCardViewFilledStyle"
+    android:backgroundTint="@color/white"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
