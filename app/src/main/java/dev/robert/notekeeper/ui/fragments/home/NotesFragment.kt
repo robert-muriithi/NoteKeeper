@@ -42,12 +42,6 @@ class NotesFragment : Fragment() {
         val view = binding.root
 
         binding.recyclerView.adapter = adapter
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                RecyclerView.VERTICAL
-            )
-        )
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
         binding.recyclerView.setHasFixedSize(true)
 

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.add_notes.AddNotesFragment">
+    tools:context=".ui.fragments.add_notes.">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/addNotesToolbar"
