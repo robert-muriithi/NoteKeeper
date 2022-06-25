@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.robert.notekeeper.adapter.NotesListAdapter
 import dev.robert.notekeeper.databinding.FragmentNotesBinding
 import dev.robert.notekeeper.model.Note
+import dev.robert.notekeeper.utils.FirestoreTable
 import dev.robert.notekeeper.utils.Resource
 
 
@@ -64,6 +65,7 @@ class NotesFragment : Fragment() {
             }
         }
 
+        cacheNotes()
         return view
     }
 
@@ -80,7 +82,7 @@ class NotesFragment : Fragment() {
             .build()
 
         db = instance
-        instance.collection("notes").addSnapshotListener { value, error ->
+        instance.collection(FirestoreTable.TABLE_NOTES).addSnapshotListener { value, error ->
             if (error != null) {
                 Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
                 return@addSnapshotListener
