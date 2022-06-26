@@ -45,7 +45,6 @@ NoteKeeper is an android application used to create and save notes online. The n
 <img src="screenshots/add_note.png" width=250/>
 <img src="screenshots/delete.png" width=250/>
 <img src="screenshots/camera_dialog.png" width=250/>
-<img src="screenshots/set_reminder.png" width=250/>
 <img src="screenshots/nav_drawer.png" width=250/>
   </p>
   
