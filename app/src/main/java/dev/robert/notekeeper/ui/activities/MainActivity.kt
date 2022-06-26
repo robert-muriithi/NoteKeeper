@@ -125,18 +125,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show()
-            R.id.action_sync -> {
-                this.lifecycleScope.launchWhenCreated {
-                    viewModel.getNotes()
-                }
-                viewModel.addNote.observe(this){
-                    when(it){
-                        is Resource.Loading -> {
-                           // binding..isV = VISIBLE
-                        }
-                    }
-                }
-            }
             else -> super.onOptionsItemSelected(item)
         }
         return super.onOptionsItemSelected(item)

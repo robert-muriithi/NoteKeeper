@@ -4,12 +4,6 @@
     tools:context="dev.robert.notekeeper.ui.activities.MainActivity">
 
     <item
-        android:id="@+id/action_sync"
-        android:title="@string/action_sync"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_sync"/>
-
-    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"

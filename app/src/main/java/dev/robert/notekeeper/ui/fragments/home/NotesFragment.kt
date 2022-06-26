@@ -44,7 +44,7 @@ class NotesFragment : Fragment() {
 
         binding.recyclerView.adapter = adapter
         itemTouchHelper.attachToRecyclerView(binding.recyclerView)
-        binding.recyclerView.setHasFixedSize(true)
+
 
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.getNotes()
@@ -117,8 +117,20 @@ class NotesFragment : Fragment() {
         @SuppressLint("NotifyDataSetChanged")
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
-            list.removeAt(position)
-            adapter.notifyDataSetChanged()
+            val note = list[position]
+            if (direction == ItemTouchHelper.LEFT) {
+                viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+                    viewModel.deleteNote(note)
+                }
+                list.remove(note)
+                adapter.notifyDataSetChanged()
+            } else {
+                viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+                    viewModel.archiveNote(note)
+                }
+                list.remove(note)
+                adapter.notifyDataSetChanged()
+            }
         }
     })
 }
